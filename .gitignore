@@ -1,0 +1,10 @@
+# Credenciales privadas y tokens locales (¡CRÍTICO NO SUBIR!)
+data.json
+
+# Archivos compilados automáticamente por esbuild
+main.js
+main.js.map
+
+# Carpetas de dependencias de desarrollo
+node_modules/
+.obsidian/

@@ -1,0 +1,9 @@
+{
+	"id": "google-tasks-syncro",
+	"name": "Google Tasks Syncro",
+	"version": "0.1.0",
+	"minAppVersion": "1.5.0",
+	"description": "Sincronizacion inteligente de tareas.",
+	"author": "Juan Luis Moreno",
+	"isDesktopOnly": false
+}
