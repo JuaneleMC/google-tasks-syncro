@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Tasks Syncro — Autorización</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .card {
+            background: #16213e;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 560px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid #0f3460;
+        }
+        .logo { font-size: 2.5rem; margin-bottom: 16px; text-align: center; }
+        h1 { font-size: 1.4rem; font-weight: 700; text-align: center; color: #a78bfa; margin-bottom: 8px; }
+        .subtitle { text-align: center; color: #9ca3af; font-size: 0.9rem; margin-bottom: 32px; }
+
+        .code-box {
+            background: #0f0f23;
+            border: 2px solid #7c3aed;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+            position: relative;
+        }
+        .code-label { font-size: 0.75rem; color: #7c3aed; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .code-value {
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            color: #34d399;
+            word-break: break-all;
+            line-height: 1.5;
+            user-select: all;
+        }
+        .copy-btn {
+            display: block;
+            width: 100%;
+            margin-top: 16px;
+            padding: 14px;
+            background: linear-gradient(135deg, #7c3aed, #4f46e5);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .copy-btn:active { transform: translateY(0); }
+        .copy-btn.copied { background: linear-gradient(135deg, #059669, #047857); }
+
+        .instructions {
+            background: #0d2137;
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 24px;
+            border-left: 4px solid #3b82f6;
+        }
+        .instructions h3 { color: #60a5fa; font-size: 0.85rem; margin-bottom: 10px; }
+        .instructions ol { padding-left: 18px; }
+        .instructions li { font-size: 0.85rem; color: #9ca3af; margin-bottom: 6px; line-height: 1.5; }
+
+        .error-box {
+            background: #2d1515;
+            border: 2px solid #dc2626;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+        .error-box p { color: #fca5a5; }
+        .waiting { text-align: center; color: #6b7280; font-size: 0.9rem; padding: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo">🔁</div>
+        <h1>Google Tasks Syncro</h1>
+        <p class="subtitle">Página de autorización OAuth</p>
+
+        <div id="content"></div>
+
+        <div class="instructions">
+            <h3>📋 Qué hacer ahora</h3>
+            <ol>
+                <li>Copia el código de autorización pulsando el botón verde.</li>
+                <li>Vuelve a <strong>Obsidian</strong> y ve a los ajustes del plugin.</li>
+                <li>Pégalo en el campo <em>"Paso 2"</em> y pulsa <strong>Confirmar</strong>.</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get('code');
+        const error = params.get('error');
+        const contentEl = document.getElementById('content');
+
+        if (code) {
+            contentEl.innerHTML = `
+                <div class="code-box">
+                    <div class="code-label">✅ Código de autorización</div>
+                    <div class="code-value" id="code-text">${code}</div>
+                </div>
+                <button class="copy-btn" id="copy-btn" onclick="copyCode()">📋 Copiar código</button>
+            `;
+        } else if (error) {
+            contentEl.innerHTML = `
+                <div class="error-box">
+                    <p>❌ <strong>Error:</strong> ${error}</p>
+                    <p style="margin-top:8px; font-size:0.85rem;">Vuelve a Obsidian e inténtalo de nuevo.</p>
+                </div>
+            `;
+        } else {
+            contentEl.innerHTML = `<p class="waiting">⏳ Esperando redirección de Google...</p>`;
+        }
+
+        function copyCode() {
+            const code = document.getElementById('code-text').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.getElementById('copy-btn');
+                btn.textContent = '✅ ¡Copiado!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '📋 Copiar código';
+                    btn.classList.remove('copied');
+                }, 3000);
+            });
+        }
+    </script>
+</body>
+</html>
